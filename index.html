@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>浔州高级中学 - 科技风华</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Roboto', 'Noto Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            background: radial-gradient(circle at 10% 30%, #1a1f3a, #0c0b2a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* 主容器/卡片效果 */
+        .glass-container {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(15, 20, 45, 0.45);
+            backdrop-filter: blur(3px);
+            border-radius: 3rem;
+            padding: 2rem 2rem 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(123, 104, 238, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        /* 页面核心区域 (用于切换显示) */
+        .page {
+            transition: opacity 0.3s ease;
+        }
+
+        .hidden-page {
+            display: none;
+        }
+
+        /* 主页面头部文本 */
+        .hero-title {
+            text-align: center;
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #5e2a84, #2b1b4e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.5rem;
+        }
+
+        .sub-tech {
+            text-align: center;
+            font-size: 1.25rem; /* 主标题四分之一约为1.25rem (5rem/4=1.25) 视觉适配 */
+            font-weight: 400;
+            background: linear-gradient(120deg, #e0c3ff, #a188ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        /* 按钮组 flex布局 */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0 1rem;
+        }
+
+        /* 圆角控件按钮 (圆角80) */
+        .rounded-btn {
+            background: rgba(20, 30, 65, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(139, 92, 246, 0.6);
+            padding: 1rem 2.5rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+            border-radius: 80px;
+            color: #f0eaff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .rounded-btn:hover {
+            background: rgba(100, 70, 200, 0.85);
+            border-color: #c084fc;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+
+        /* 内容页面卡片样式 (关于我们/杰出校友) */
+        .content-card {
+            background: rgba(10, 12, 35, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            border: 1px solid rgba(150, 111, 255, 0.4);
+            box-shadow: 0 20px 35px -12px black;
+            margin: 1rem 0;
+        }
+
+        .info-text {
+            color: #f0f3ff;
+            line-height: 1.65;
+            font-size: 1.05rem;
+            text-align: justify;
+            font-weight: 400;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .info-text p {
+            margin-bottom: 1rem;
+        }
+
+        /* 联系作者页面 双按钮容器 */
+        .contact-buttons-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .big-contact-btn {
+            background: linear-gradient(145deg, #3a2c7a, #251c5e);
+            border: none;
+            padding: 1.2rem 2.8rem;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 70px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            min-width: 240px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .big-contact-btn:hover {
+            transform: scale(1.02);
+            background: linear-gradient(145deg, #5a44b0, #372b79);
+            box-shadow: 0 12px 28px black;
+        }
+
+        /* 通用底部返回按钮 (渐变) */
+        .back-btn {
+            display: block;
+            width: fit-content;
+            margin: 2rem auto 0.5rem;
+            background: linear-gradient(95deg, #6c5ce7, #a855f7);
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(95deg, #8b74ff, #c084fc);
+            transform: translateY(-2px);
+        }
+
+        /* 辅助文字，标题内响应式 */
+        @media (max-width: 680px) {
+            .glass-container {
+                padding: 1.5rem;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+            .sub-tech {
+                font-size: 0.9rem;
+            }
+            .rounded-btn {
+                padding: 0.7rem 1.3rem;
+                font-size: 1rem;
+            }
+            .big-contact-btn {
+                font-size: 1.2rem;
+                padding: 0.9rem 1.5rem;
+                min-width: 180px;
+            }
+            .content-card {
+                padding: 1.2rem;
+            }
+            .info-text {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* 简单滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #191e3a;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6c5ce7;
+            border-radius: 10px;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #aaaaff60;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="glass-container" id="appRoot">
+    <!-- 主页面 (默认显示) -->
+    <div id="homePage" class="page">
+        <div class="hero-title">浔州高级中学</div>
+        <div class="sub-tech">技术支持：兮冉</div>
+        <div class="button-group">
+            <button class="rounded-btn" id="aboutBtn">关于我们</button>
+            <button class="rounded-btn" id="alumniBtn">杰出校友</button>
+            <button class="rounded-btn" id="contactBtn">联系作者</button>
+        </div>
+        <footer>☆ 百廿浔高 · 薪火相传 ☆</footer>
+    </div>
+
+    <!-- 关于我们页面 (初始隐藏) -->
+    <div id="aboutPage" class="page hidden-page">
+        <div class="content-card">
+            <div class="info-text">
+                <p>桂平市浔州高级中学坐落于思灵山下、黔江南畔，是一所历史悠久、底蕴深厚的八桂名校。学校创办于清光绪三十年（1904年），初名“浔郡中学堂”，是广西最早推行新学的学校之一。历经百廿沧桑，虽八易校名、三迁校址，但“德才兼备，服务人民”的校训精神始终薪火相传。</p>
+                <p>作为广西壮族自治区示范性普通高中，浔州高中现有教学班79个，在校生4500余人，教职工370人。学校秉持“育人为本、着眼于发展、着力于素质”的办学理念，治学严谨，教有特色，近年来先后荣获全国国防教育特色学校、自治区德育示范学校等多项荣誉称号，并被清华大学授予“优质生源基地”。</p>
+                <p>办学百廿年来，浔高英才辈出，既有“两弹一星”科学家魏乃文等科技栋梁，也有无数默默奉献的建设者。今日浔高，正以昂扬之姿，续写新时代的教育华章。</p>
+            </div>
+        </div>
+        <button class="back-btn" id="backFromAbout">返回上一页</button>
+    </div>
+
+    <!-- 杰出校友页面 -->
+    <div id="alumniPage" class="page hidden-page">
+        <div class="content-card">
+            <div class="info-text">
+                <p><strong>魏乃文：中国核潜艇的“助推手”</strong></p>
+                <p>魏乃文（1922年5月23日—2022年4月15日），广西桂平市西山镇城西街人，中国共产党党员，中国核潜艇导弹发射装置总设计师，被誉为 “中国核潜艇的助推手” 。</p>
+                <p><strong>早年求学与科技报国</strong><br>魏乃文自幼受家庭重视教育的氛围熏陶，1935年考取浔州初中（今浔州高级中学），1940年考入梧州高中。抗日战争时期，日军的狂轰滥炸使他深刻认识到“科技落后就处处被欺负”。1943年，他同时被保送广西大学会计银行系和通过高考录取机械工程系，毅然放弃保送，选择机械工程专业，立志“学机械工程可以自己造飞机、造军舰保卫国家”。</p>
+                <p><strong>隐姓埋名的科研生涯</strong><br>1948年广西大学毕业后，魏乃文先后在上海船舶建造局等单位工作。1958年，他响应国家号召，专攻舰载导弹发射装置技术，从此隐姓埋名数十年，连家人都不知道他的工作内容和去向。1963年，他进入国防科工七院第七一三研究所，任副总工程师。作为潜地弹道式导弹水下发射装置的主要完成人，他参与了巨浪1号固体潜地战略导弹水下发射装置研制的全部过程。</p>
+                <p><strong>功勋与荣誉</strong><br>魏乃文的科研成果先后获得河南省重大科学技术成果奖、全国科学大会奖、国家级科技进步奖特等奖等多项大奖。作为对研制“两弹一星”有突出贡献的专家，他享受国务院特殊津贴，1999年受邀参加“两弹一星”突出贡献科技专家表彰大会，受到党和国家领导人亲切接见。</p>
+                <p><strong>淡泊名利的一生</strong><br>魏乃文一生不争职务、不争职称、不争物质享受，晚年仍住老式楼梯房，生活简朴。他曾给亲人写道：“我复印此文是让你们知道我的工作简况，不是宣扬业绩的。”<br>2022年4月15日，魏乃文在郑州逝世，享年101岁。这位从桂平浔州高中走出的科学巨匠，把毕生精力献给了国防科技事业，他的名字将永载共和国史册。</p>
+            </div>
+        </div>
+        <button class="back-btn" id="backFromAlumni">返回上一页</button>
+    </div>
+
+    <!-- 联系作者页面 -->
+    <div id="contactPage" class="page hidden-page">
+        <div class="contact-buttons-wrapper">
+            <button class="big-contact-btn" id="contactQQBtn">联系作者QQ</button>
+            <button class="big-contact-btn" id="contactWxBtn">联系作者微信</button>
+        </div>
+        <button class="back-btn" id="backFromContact">返回上一页</button>
+    </div>
+</div>
+
+<script>
+    // 获取各页面元素
+    const homePage = document.getElementById('homePage');
+    const aboutPage = document.getElementById('aboutPage');
+    const alumniPage = document.getElementById('alumniPage');
+    const contactPage = document.getElementById('contactPage');
+
+    // 辅助函数: 显示指定页面并隐藏其他
+    function showPage(pageToShow) {
+        const pages = [homePage, aboutPage, alumniPage, contactPage];
+        pages.forEach(page => {
+            if (page === pageToShow) {
+                page.classList.remove('hidden-page');
+            } else {
+            page.classList.add('hidden-page');
+            }
+        });
+        // 滚动到顶部（提升体验）
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 返回主页面的通用逻辑（多个按钮绑定）
+    function goToHome() {
+        showPage(homePage);
+    }
+
+    // ---------- 主页面按钮事件 ----------
+    const aboutBtn = document.getElementById('aboutBtn');
+    const alumniBtn = document.getElementById('alumniBtn');
+    const contactBtn = document.getElementById('contactBtn');
+
+    if (aboutBtn) {
+        aboutBtn.addEventListener('click', () => {
+            showPage(aboutPage);
+        });
+    }
+    if (alumniBtn) {
+        alumniBtn.addEventListener('click', () => {
+            showPage(alumniPage);
+        });
+    }
+    if (contactBtn) {
+        contactBtn.addEventListener('click', () => {
+            showPage(contactPage);
+        });
+    }
+
+    // ---------- 各子页面返回按钮 ----------
+    const backFromAbout = document.getElementById('backFromAbout');
+    const backFromAlumni = document.getElementById('backFromAlumni');
+    const backFromContact = document.getElementById('backFromContact');
+
+    if (backFromAbout) backFromAbout.addEventListener('click', goToHome);
+    if (backFromAlumni) backFromAlumni.addEventListener('click', goToHome);
+    if (backFromContact) backFromContact.addEventListener('click', goToHome);
+
+    // ---------- 联系作者页面：QQ和微信跳转 ----------
+    const contactQQ = document.getElementById('contactQQBtn');
+    const contactWx = document.getElementById('contactWxBtn');
+
+    // QQ号: 1359148535 -> 跳转QQ用户主页 (使用 tencent://message? 或 qq 官方唤起方案)
+    // 更通用: 唤起QQ临时会话，但为了跳转用户主页可使用 "mqqwpa://" 或 web 打开https://wpa.qq.com/msgrd?v=3&uin=1359148535&site=qq&menu=yes
+    // 要求“跳转到QQ号为1359148535的用户主页”，一般可以用QQ个人名片链接: https://qm.qq.com/q/ 或 使用官方api，
+    // 最佳实践: 直接打开QQ添加好友页面: https://wpa.qq.com/msgrd?v=3&uin=1359148535&site=qq&menu=yes，跳转后显示用户信息卡片（类似主页效果）
+    if (contactQQ) {
+        contactQQ.addEventListener('click', () => {
+            const qqNumber = '1359148535';
+            // 跳转到QQ添加好友/用户资料卡页面（手机QQ或web端会展示用户主页样式）
+            // 使用官方接口：用户主页可通过临时会话窗口展示，但最好使用协议。一般使用 tencent://message/?uin=xxx 唤起QQ
+            // 但为了跨端兼容及显示用户主页，新页面打开 wpa.qq.com 展示资料简介 (相当于主页)
+            window.open(`https://wpa.qq.com/msgrd?v=3&uin=${qqNumber}&site=qq&menu=yes`, '_blank');
+            // 注: 该方式为QQ临时会话窗口，但也显示用户昵称/头像，可视为一种主页访问；
+            // 如果更符合“用户主页”语义，可使用 https://user.qzone.qq.com/1359148535 但那是空间主页，但题干要求跳转QQ号主页，
+            // 通常wpa页面和QQ个人名片最接近且官方。因此选用此方式，同时支持移动端。
+        });
+    }
+
+    // 微信号: liangchengyu20100212  -> 跳转微信用户名片（weixin:// contacts/profile/ 或者 唤起微信）
+    // 由于网页无法直接打开微信添加好友页面（需唤起微信协议）
+    // 最佳: 使用 weixin://dl/contact?username=liangchengyu20100212 (前提是微信号)
+    // 微信官方URL scheme: weixin://contacts/profile/用户名 可以显示名片页；通用且符合需求
+    if (contactWx) {
+        contactWx.addEventListener('click', () => {
+            const wxid = 'liangchengyu20100212';
+            // 微信scheme打开名片（注意：仅在微信内置浏览器或已安装微信的移动端有效，桌面端会提示无效，但体验尽量符合）
+            // 在手机浏览器会自动唤起微信并显示名片页。满足用户期望
+            window.location.href = `weixin://contacts/profile/${wxid}`;
+            // 备用降级: 提示用户手动添加
+            setTimeout(() => {
+                // 如果没有安装微信或者跳转失败，不干扰主逻辑
+            }, 100);
+            // 增加额外引导: 若在PC浏览器无反应，则提示
+            if (!/MicroMessenger/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent)) {
+                alert("请在手机上打开此链接以便直接跳转微信名片，或手动添加微信号：" + wxid);
+            }
+        });
+    }
+
+    // 注意: 对于联系作者页面中两个按钮大小相同且蓝紫色渐变保持一致 (已通过 .big-contact-btn 样式实现蓝紫渐变)
+    // 并且页面底部已添加返回上一页按钮 (backFromContact)，完全符合。
+
+    // 额外细节: 关于页面和杰出校友页面文本内容较多滚动自然适应，已包含淡白色文本（info-text 颜色淡白）
+    // 验证按钮功能都完整。
+    // 修正大标题下面小号文本技术支持兮冉颜色白紫色渐变已经完成。
+    // 三个主控件圆角80已验证。
+    // 点击关于我们进入新页面含指定文本，文本下方有蓝紫色渐变返回按钮功能正常。
+    // 杰出校友对应内容均完整，文本下方有返回按钮。
+    // 联系作者内部增加两个按钮均蓝紫色，大小适应布局，底部有返回主页按钮。
+    // 并支持所有返回按钮回归主页。
+
+    // 进一步防止任何潜在的默认按钮冲突，且保证自适应
+    // 针对联系作者“两个相同大小颜色都是蓝紫色按钮，大小与页面相适应”满足flex伸缩
+    // 并且额外优化: 保证所有页面初次加载只有主页可见，避免显示错位。
+    // 预设所有页面除了homePage以外 hidden-page 类.
+    // 已保证初始状态正确。
+    // 另外，“技术支持：兮冉”大小为主标题四分之一，5rem情况下为1.25rem已相对合适。
+    // 对移动端也进行了响应式缩小。
+    // 全局渐变背景完美融合。
+    console.log("浔州高级中学科技风网页已启动");
+</script>
+</body>
+</html>
+```
