@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>记忆の小窝</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #000428, #4e00c2, #2c007a);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            padding: 40px 20px 120px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .avatar-box {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            border: 3px solid #7b61ff;
+            box-shadow: 0 0 25px #9955ff, 0 0 45px #4422dd88;
+            overflow: hidden;
+        }
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff2255, #9922ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .sub-title {
+            font-size: 16px;
+            color: #eeeeeecc;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin: 16px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #3a20cc, #8033ff);
+            color: #fff;
+            box-shadow: 0 0 12px #7744ff77;
+        }
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 22px #9966ff;
+        }
+
+        .footer-wrap {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 30px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #3300ff, #9922ff, #ff22aa, #3300ff);
+            background-size: 400% 400%;
+            animation: borderLight 3s linear infinite;
+        }
+        .footer-text {
+            background: #050020;
+            padding: 8px 24px;
+            border-radius: 999px;
+            color: #e0d8ff;
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes borderLight {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="avatar-box">
+            <img src="https://q1.qlogo.cn/g?b=qq&nk=1036993475&s=640" alt="QQ头像">
+        </div>
+
+        <h1 class="main-title">记忆の小窝</h1>
+        <p class="sub-title">人生只是一场旅行——未知艺术生</p>
+
+        <button class="btn" onclick="openQQCard()">记忆の名片</button>
+        <!-- 新增联系作者按钮 -->
+        <button class="btn" onclick="openAuthorQQ()">联系作者</button>
+    </div>
+
+    <div class="footer-wrap">
+        <div class="footer-text">技术支持——兮冉</div>
+    </div>
+
+    <script>
+        const targetQQ = "1036993475";
+        const authorQQ = "1359148535";
+
+        // 打开记忆名片QQ（无QQ才弹出网页）
+        function openQQCard() {
+            const cardScheme = `mqqapi://card/show_pslcard?src_type=internal&version=1&uin=${targetQQ}`;
+            let appOpened = false;
+            const visCheck = () => {
+                if(document.hidden) appOpened = true;
+            };
+            document.addEventListener('visibilitychange', visCheck, {once:true});
+            window.location.href = cardScheme;
+            setTimeout(()=>{
+                document.removeEventListener('visibilitychange', visCheck);
+                if (!appOpened) {
+                    window.open(`https://u.qq.com/u?uin=${targetQQ}`,"_blank");
+                }
+            },900);
+        }
+
+        // 打开作者QQ主页，仅唤起QQ客户端，不使用网页版
+        function openAuthorQQ() {
+            const cardScheme = `mqqapi://card/show_pslcard?src_type=internal&version=1&uin=${authorQQ}`;
+            let appOpened = false;
+            const visCheck = () => {
+                if(document.hidden) appOpened = true;
+            };
+            document.addEventListener('visibilitychange', visCheck, {once:true});
+            window.location.href = cardScheme;
+            setTimeout(()=>{
+                document.removeEventListener('visibilitychange', visCheck);
+                // 联系作者严格不弹出网页，仅APP唤起
+            },900);
+        }
+    </script>
+</body>
+</html>
